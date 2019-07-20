@@ -17,7 +17,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 
-from exercises.views import SchoolView, SchoolClassView, StudentView, GradesView
+from exercises.views import SchoolView, SchoolClassView, StudentView, GradesView, StudentSearchFormView, \
+    StudentAddFormView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -26,4 +27,6 @@ urlpatterns = [
         name="school-class"),
     url(r'^students/(?P<student_id>(\d)+)', StudentView.as_view(), name="students"),
     url(r'^grades/(?P<student_id>(\d)+)/(?P<subject_id>(\d)+)', GradesView.as_view(), name="grades"),
+    url(r'^student_search/', StudentSearchFormView.as_view(), name="search_student"),
+    url(r'^student_add/', StudentAddFormView.as_view(), name="add_student"),
 ]

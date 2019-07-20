@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="{% url 'search_student' %}" method="get">
+    {{ form }}
+    <input type="submit" value="ok">
+</form>
+
+    {% if students %}
+        <table class="table">
+            {% for s in students %}
+                <tr>
+                <td>{{ s.name }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

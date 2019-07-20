@@ -7,6 +7,8 @@
     </head>
     <body>
     <div class="container">
+    {% load static %}
+    <img src="{% static 'logo.png' %}" alt="Logo" class="img-fluid rounded mx-auto d-block">
         {%  block content %}
         {%  endblock %}
     </div>
