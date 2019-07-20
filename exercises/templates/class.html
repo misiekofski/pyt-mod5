@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<a href="{% url 'index' %} "><- Wróc do listy klas</a>
+
+<h2>Uczniowie klasy {{ class_name }}:</h2>
+
+    <table class="table">
+        <tr>
+            <th>Link</th>
+            <th>Imie</th>
+            <th>Nazwisko</th>
+            <th>Klasa</th>
+        </tr>
+        {% for s in students %}
+        <tr>
+            <td><a href="{% url 'students' s.id %}">{{  s.id }}</a></td>
+            <td>{{ s.first_name }}</td>
+            <td>{{ s.last_name }}</td>
+            <td>{{ s.school_class }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{%  endblock %}

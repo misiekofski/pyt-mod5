@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<a href="{% url 'students' student.id %}"><- Powrót do listy przedmiotów ucznia</a>
+
+<h2>Oceny ucznia {{ student.name }}:</h2>
+
+    <table class="table">
+        <tr>
+            <th>Imie</th>
+            <th>Nazwisko</th>
+            <th>Klasa</th>
+        </tr>
+        <tr>
+            <td>{{ student.first_name }}</td>
+            <td>{{ student.last_name }}</td>
+            <td>{{ student.get_school_class_display }}</td>
+        </tr>
+
+    </table>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th>Ocena</th>
+            <th>Przedmiot</th>
+            <th>Prowadzący</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for g in grades %}
+            <tr>
+                <td>{{ g.get_grade_display }}</td>
+                <td>{{ g.school_subject.name }}</td>
+                <td>{{ g.school_subject.teacher_name }}</td>
+            </tr>
+            {% endfor %}
+
+            {% if average > 0 %}
+            <tr>
+                <td>Średnia: {{ average }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td>Uczeń nie ma jeszcze ocen</td>
+            </tr>
+            {% endif %}
+       </tbody>
+{%  endblock %}

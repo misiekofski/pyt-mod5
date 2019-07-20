@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <a href="{%  url 'school-class' student.school_class %}"><- Powrót do listy uczniów</a>
+
+<h2>Uczeń {{ student.name }}:</h2>
+
+
+    <table class="table">
+        <tr>
+            <th>Imie</th>
+            <th>Nazwisko</th>
+            <th>Klasa</th>
+        </tr>
+        <tr>
+            <td>{{ student.first_name }}</td>
+            <td>{{ student.last_name }}</td>
+            <td>{{ student.get_school_class_display }}</td>
+        </tr>
+    </table>
+
+    <table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>Przedmiot</th>
+            <th>Prowadzący</th>
+        </tr>
+    </thead>
+    <tbody>
+            {% for s in subjects %}
+            <tr>
+                <td><a href="/grades/{{ student.id }}/{{ s.id }}">{{ s.name }}</a></td>
+                <td>{{ s.teacher_name }}</td>
+            </tr>
+            {% endfor %}
+    </tbody>
+    </table>
+
+{%  endblock %}
