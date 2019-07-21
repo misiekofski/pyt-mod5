@@ -42,6 +42,7 @@ class Student(models.Model):
     last_name = models.CharField(max_length=64)
     school_class = models.IntegerField(choices=SCHOOL_CLASS)
     grades = models.ManyToManyField(SchoolSubject, through="StudentGrades")
+    year_of_birth = models.IntegerField(blank=True, null=True)
 
     @property
     def name(self):
@@ -55,5 +56,3 @@ class StudentGrades(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     school_subject = models.ForeignKey(SchoolSubject, on_delete=models.CASCADE)
     grade = models.FloatField(choices=GRADES)
-
-

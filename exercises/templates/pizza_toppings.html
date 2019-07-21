@@ -1,0 +1,8 @@
+{%  extends 'base.html' %}
+
+{% block content %}
+<form action="{% url 'pizza' %}" method="get">
+    {{ form.as_p }}
+    <input type="submit" value="Dej mnie">
+</form>
+{% endblock %}
