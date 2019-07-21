@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views import View
 
-from exercises.forms import SearchStudentForm, AddStudentForm
+from exercises.forms import SearchStudentForm, AddStudentForm, PizzaToppingsForm, UserValidationForm
 from .models import SCHOOL_CLASS, Student, SchoolSubject, StudentGrades
 
 # Create your views here.
@@ -48,8 +48,8 @@ class GradesView(View):
 class StudentSearchFormView(View):
     def get(self, request):
         form = SearchStudentForm()
-        if "student" in request.GET:
-            search_ctx = request.GET["student"]
+        if "last_name" in request.GET:
+            search_ctx = request.GET["last_name"]
             students = Student.objects.filter(last_name__icontains=search_ctx)
         else:
             students = None
@@ -70,3 +70,26 @@ class StudentAddFormView(View):
             klasa = form.cleaned_data['klasa']
             Student.objects.create(first_name=name, last_name=surname, school_class=klasa)
             return HttpResponseRedirect('/student_add/')
+
+
+class PizzaToppingsView(View):
+    def get(self, request):
+        form = PizzaToppingsForm()
+        return render(request, "pizza_toppings.html", {"form": form})
+
+
+class UserValidationView(View):
+    def get(self, request):
+        form = UserValidationForm()
+        return render(request, "user_validation.html", {"form": form})
+
+    def post(self, request):
+        form = UserValidationForm(request.POST)
+        if form.is_valid():
+            first_name = form.cleaned_data['first_name']
+            last_name = form.cleaned_data['last_name']
+            email = form.cleaned_data['email']
+            url = form.cleaned_data['url']
+            return render(request, "user_validation.html", {"form": form})
+        else:
+            return render(request, "user_validation.html", {"form": form})
