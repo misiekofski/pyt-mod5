@@ -1,26 +1,30 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib.auth.models import User
+from django.contrib import messages
 
-from exercises.forms import SearchStudentForm, AddStudentForm, PizzaToppingsForm, UserValidationForm, UserForm
+from exercises.forms import SearchStudentForm, AddStudentForm, PizzaToppingsForm, UserValidationForm, UserForm, \
+    ResetPasswordForm
 from .models import SCHOOL_CLASS, Student, SchoolSubject, StudentGrades
+
 
 # Create your views here.
 class SchoolView(View):
 
     def get(self, request):
         return render(request, "school.html",
-                      { "SCHOOL_CLASS": SCHOOL_CLASS })
+                      {"SCHOOL_CLASS": SCHOOL_CLASS})
 
 
 class SchoolClassView(View):
     def get(self, request, school_class):
         students = Student.objects.filter(school_class=school_class)
         return render(request, "class.html", {"students": students,
-                                              "class_name": SCHOOL_CLASS[int(school_class)-1][1]})
+                                              "class_name": SCHOOL_CLASS[int(school_class) - 1][1]})
 
 
 class StudentView(View):
@@ -39,8 +43,8 @@ class GradesView(View):
         for g in grades:
             average.append(g.grade)
 
-        if len(average)>0:
-            av = sum(average)/len(average)
+        if len(average) > 0:
+            av = sum(average) / len(average)
         else:
             av = 0
         return render(request, "grades.html", {"student": student,
@@ -116,7 +120,30 @@ class LoginView(View):
                 return redirect('users_view')
         return redirect('login')
 
+
 class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('users_view')
+
+
+class ResetPassword(View):
+    def get(self, request, user_id):
+        form = ResetPasswordForm()
+        return render(request, 'reset_password.html', {"form": form,
+                                                       "user_id": user_id})
+
+    def post(self, request, user_id):
+        form = ResetPasswordForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data['password']
+            repeat_password = form.cleaned_data['repeat_password']
+            if password == repeat_password:
+                user = User.objects.get(pk=user_id)
+                user.password = password
+                user.save()
+                messages.success(request, 'Your password was successfully changed')
+            else:
+                print("Warning is added")
+                messages.warning(request, 'Something went horribly wrong!')
+        return redirect('reset_password', user_id=user_id)
