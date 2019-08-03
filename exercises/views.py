@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -141,7 +141,7 @@ class ResetPassword(PermissionRequiredMixin, View):
             repeat_password = form.cleaned_data['repeat_password']
             if password == repeat_password:
                 user = User.objects.get(pk=user_id)
-                user.password = password
+                user.set_password(password)
                 user.save()
                 messages.success(request, 'Your password was successfully changed')
             else:
