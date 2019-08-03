@@ -8,10 +8,15 @@
     <body>
     <div class="container">
     {% load static %}
+    {% if user.is_authenticated %}
+        <a href="/logout">Wyloguj</a>
+    {% else %}
+        <a href="/login">Zaloguj</a>
+    {% endif %}
+
     <img src="{% static 'logo.png' %}" alt="Logo" class="img-fluid rounded mx-auto d-block">
         {%  block content %}
         {%  endblock %}
     </div>
-
     </body>
 </html>

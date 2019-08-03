@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from exercises.views import SchoolView, SchoolClassView, StudentView, GradesView, StudentSearchFormView, \
-    StudentAddFormView, PizzaToppingsView, UserValidationView
+    StudentAddFormView, PizzaToppingsView, UserValidationView, UsersView, LoginView, LogoutView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -30,5 +30,8 @@ urlpatterns = [
     url(r'^student_search/', StudentSearchFormView.as_view(), name="search_student"),
     url(r'^student_add/', StudentAddFormView.as_view(), name="add_student"),
     url(r'^pizza/', PizzaToppingsView.as_view(), name="pizza"),
-    url(r'^d2_p3_e1/', UserValidationView.as_view(), name="user_validation")
+    url(r'^d2_p3_e1/', UserValidationView.as_view(), name="user_validation"),
+    url(r'^list_users/', UsersView.as_view(), name='users_view'),
+    url(r'^login', LoginView.as_view(), name='login'),
+    url(r'^logout', LogoutView.as_view(), name='logout'),
 ]
