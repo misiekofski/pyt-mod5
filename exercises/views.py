@@ -1,8 +1,11 @@
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
+from django.contrib.auth.models import User
 
-from exercises.forms import SearchStudentForm, AddStudentForm, PizzaToppingsForm, UserValidationForm
+from exercises.forms import SearchStudentForm, AddStudentForm, PizzaToppingsForm, UserValidationForm, UserForm
 from .models import SCHOOL_CLASS, Student, SchoolSubject, StudentGrades
 
 # Create your views here.
@@ -86,10 +89,34 @@ class UserValidationView(View):
     def post(self, request):
         form = UserValidationForm(request.POST)
         if form.is_valid():
-            first_name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            email = form.cleaned_data['email']
-            url = form.cleaned_data['url']
             return render(request, "user_validation.html", {"form": form})
         else:
             return render(request, "user_validation.html", {"form": form})
+
+
+class UsersView(View):
+    def get(self, request):
+        users = User.objects.all()
+        return render(request, "users.html", {"users": users})
+
+
+class LoginView(View):
+    def get(self, request):
+        form = UserForm()
+        return render(request, 'login.html', {"form": form})
+
+    def post(self, request):
+        form = UserForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('users_view')
+        return redirect('login')
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('users_view')
