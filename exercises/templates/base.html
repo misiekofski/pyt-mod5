@@ -8,15 +8,28 @@
     <body>
     <div class="container">
     {% load static %}
-    {% if user.is_authenticated %}
-        <a href="/logout">Wyloguj</a>
-    {% else %}
-        <a href="/login">Zaloguj</a>
-    {% endif %}
 
     <img src="{% static 'logo.png' %}" alt="Logo" class="img-fluid rounded mx-auto d-block">
         {%  block content %}
         {%  endblock %}
     </div>
+
+     {% if user.is_authenticated %}
+         <p>Zalogowany użytkownik: {{ user.username }}</p>
+         <a href="/logout">Wyloguj</a>
+    {% else %}
+         <p>Żodyn nie zalogowany</p>
+         <a href="/login">Zaloguj</a>
+    {% endif %}
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+
     </body>
 </html>

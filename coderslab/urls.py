@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from exercises.views import SchoolView, SchoolClassView, StudentView, GradesView, StudentSearchFormView, \
-    StudentAddFormView, PizzaToppingsView, UserValidationView, UsersView, LoginView, LogoutView
+    StudentAddFormView, PizzaToppingsView, UserValidationView, UsersView, LoginView, LogoutView, ResetPassword
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -34,4 +34,5 @@ urlpatterns = [
     url(r'^list_users/', UsersView.as_view(), name='users_view'),
     url(r'^login', LoginView.as_view(), name='login'),
     url(r'^logout', LogoutView.as_view(), name='logout'),
+    url(r'^reset_password/(?P<user_id>(\d)+)', ResetPassword.as_view(), name='reset_password'),
 ]

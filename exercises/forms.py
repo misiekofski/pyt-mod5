@@ -39,3 +39,8 @@ class UserValidationForm(forms.Form):
 class UserForm(forms.Form):
     username = forms.CharField(max_length=64)
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+class ResetPasswordForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput)
+    repeat_password = forms.CharField(widget=forms.PasswordInput)

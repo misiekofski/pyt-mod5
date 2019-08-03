@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -127,7 +127,8 @@ class LogoutView(View):
         return redirect('users_view')
 
 
-class ResetPassword(View):
+class ResetPassword(PermissionRequiredMixin, View):
+    permission_required = 'auth.change_user'
     def get(self, request, user_id):
         form = ResetPasswordForm()
         return render(request, 'reset_password.html', {"form": form,
@@ -135,7 +136,7 @@ class ResetPassword(View):
 
     def post(self, request, user_id):
         form = ResetPasswordForm(request.POST)
-        if form.is_valid():
+        if form.is_valid(): # and request.user.has_perm("auth.change_user"):
             password = form.cleaned_data['password']
             repeat_password = form.cleaned_data['repeat_password']
             if password == repeat_password:
@@ -146,4 +147,6 @@ class ResetPassword(View):
             else:
                 print("Warning is added")
                 messages.warning(request, 'Something went horribly wrong!')
+        else:
+            messages.warning(request, 'You dont have permissions to do that')
         return redirect('reset_password', user_id=user_id)
